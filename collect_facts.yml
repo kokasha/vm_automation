@@ -1,0 +1,12 @@
+
+---
+- name: Collect VM Facts
+  hosts: all
+  gather_facts: yes
+  tasks:
+
+    - name: Output Some Logs
+      debug:
+        msg:
+          - "{{ inventory_hostname }}"
+          - "{{ hostvars[inventory_hostname] }}"

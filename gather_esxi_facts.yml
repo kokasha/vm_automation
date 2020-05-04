@@ -1,0 +1,24 @@
+---
+- name: Get vCenter facts
+  hosts: localhost
+  gather_facts: no
+  tasks:
+    - name: Collect ESXI Facts
+      vmware_host_facts:
+        hostname: 192.168.0.80
+        esxi_hostname: 192.168.0.50
+        username: administrator@vcenter.local
+        password: K0K@sha82;
+        validate_certs: no
+      register: esxi_facts
+    - debug: var=esxi_facts
+  
+    - name: Get guest customization
+      vmware_guest_customization_info:
+        hostname: 192.168.0.80
+        # esxi_hostname: 192.168.0.50
+        username: administrator@vcenter.local
+        password: K0K@sha82;
+        validate_certs: no
+      register: guest_custom
+    - debug: var=guest_custom

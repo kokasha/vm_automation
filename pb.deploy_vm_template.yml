@@ -1,0 +1,37 @@
+- name: Deploy VMs using VMware Templates
+  hosts: all
+  gather_facts: no
+  tasks:
+
+  - name: Create a virtual machine from a template
+    vmware_guest:
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      validate_certs: no
+      datacenter: myVmwareLab
+      folder: /myVmwareLab/vm
+      name: dev01
+      state: poweredon
+      template: soe_rhel8
+      disk:
+      - size_gb: 10
+        type: thin
+        datastore: datastore1
+      hardware:
+        memory_mb: 512
+        num_cpus: 1
+      networks:
+      - name: VM Network
+        ip: 192.168.0.171
+        netmask: 255.255.255.0
+        gateway: 192.168.0.1
+      customization:
+        dns_servers:
+        - 192.168.0.40
+        domain: kokasha.lab
+
+      wait_for_ip_address: yes
+    delegate_to: localhost
+    register: new_vm
+  - debug: var=new_vm

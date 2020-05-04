@@ -1,0 +1,12 @@
+---
+- name: Get vCenter facts
+  hosts: localhost
+  gather_facts: no
+  tasks:
+    - vmware_about_info:
+        hostname: 192.168.0.80
+        username: administrator@vcenter.local
+        password: K0K@sha82;
+        validate_certs: no
+      register: vcenter_facts
+    - debug: var=vcenter_facts

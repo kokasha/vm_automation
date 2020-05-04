@@ -1,0 +1,36 @@
+
+---
+- name: Get vCenter facts
+  hosts: vCenterLab
+  gather_facts: no
+  vars:
+    vcenter_hostname: 192.168.0.80
+    vcenter_username: administrator@vcenter.local
+    vcenter_password: K0K@sha82;
+  tasks:
+
+  - name: Create a virtual machine from a template
+    vmware_guest:
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      validate_certs: no
+      datacenter: myVmwareLab
+      folder: new_vms
+      name: testvm_2
+      state: poweredon
+      template: rhel7.7_gui_soe
+      disk:
+      - size_gb: 20
+        type: thin
+        datastore: datastore1
+      hardware:
+        memory_mb: 512
+        num_cpus: 6
+      networks:
+      - name: VM Network
+        # mac: aa:bb:dd:aa:00:14
+      # wait_for_ip_address: yes
+    delegate_to: localhost
+    register: deploy
+  - debug: var=deploy
